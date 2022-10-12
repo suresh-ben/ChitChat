@@ -1,0 +1,93 @@
+.my-body {
+  height: 93vh;
+  padding-top: 7vh;
+}
+
+.input-container {
+  position: absolute;
+  bottom: 0;
+  width: 91%;
+  margin: 1rem;
+  margin-right: 1.2rem;
+  position: fixed;
+}
+
+.input-message {
+  border-radius: 2rem;
+  width: 88%;
+  padding: .1rem 1rem;
+}
+
+.send-button {
+  border-radius: 5rem;
+  width: 10%;
+  background-color: #3F4E4F;
+}
+
+.send-img {
+  height: 1.25rem;
+  margin: .1rem;
+  margin-left: 15%;
+}
+
+/* message */
+.message-container {
+  overflow-y: scroll;
+  padding-bottom: 8vh;
+}
+
+.message-box {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.join-box {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+.join-secret{
+  background-color: #3F4E4F;
+
+  padding: 0 1rem;
+  margin: 0;
+  border-radius: 5px;
+  font-size: .75rem;
+  color: #D8D9CF;
+}
+
+.message {
+  max-width: 85%;
+  border-radius: 10px;
+  padding: .3rem .5rem;
+  padding-top: 1px;
+  margin: 0;
+  background-color: #355764;
+  display: inline-block;
+}
+
+.message p {
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+.message .name {
+  font-size: .85rem;
+  color: skyblue;
+}
+
+.message .secret {
+  padding: 0 .5rem;
+  border-radius: 5px;
+  background-color: #3F4E4F;
+}
+
+/* my message */
+.my-message-box {
+  justify-content: flex-end;
+}
+
+.my-message {
+  background-color: #51557E !important;
+}
