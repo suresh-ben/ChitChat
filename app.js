@@ -18,7 +18,10 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 //Variables
-const port = process.env.SERVERPORT;
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
 const url = process.env.DATAPORT;
 const dbName = "ChitChat";
 const client = new MongoClient(url, {
