@@ -1,0 +1,37 @@
+.logs-nav{
+  z-index: 2;
+  width: 100%;
+  background-color: #355764;
+  position: fixed;
+}
+.logs-nav-bar{
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logs-nav-options{
+  margin-right: 1rem;
+}
+
+.logs-main{
+  height: 5vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5rem;
+}
+
+.log-option{
+  text-decoration: none;
+  color: white;
+  padding: .5rem;
+}
+.log-option:hover{
+  color:skyblue;
+}
+.log-option-selected{
+  border-bottom: solid;
+  border-color: skyblue;
+}

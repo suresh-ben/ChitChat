@@ -19,21 +19,24 @@
 }
 
 .send-button {
-  border-radius: 5rem;
   width: 10%;
   background-color: #3F4E4F;
+  border-radius: 2rem;
+  text-align: center;
 }
 
 .send-img {
-  height: 1.25rem;
-  margin: .1rem;
-  margin-left: 15%;
+  height: 1.8rem;
+  padding: .2rem;
+  padding-bottom: .25rem;
+  margin-left: auto;
 }
 
 /* message */
 .message-container {
   overflow-y: scroll;
   padding-bottom: 8vh;
+  width: 100vw;
 }
 
 .message-box {
@@ -90,4 +93,143 @@
 
 .my-message {
   background-color: #51557E !important;
+}
+
+
+/* Chat-opner and manager */
+.chat-manager{
+  position: absolute;
+  display: none;
+}
+
+.chat-section{
+  z-index: 1;
+  position: relative;
+  left:100vw;
+  opacity: 0.5;
+
+  transition: .2s;
+}
+.chat-on{
+  left:0;
+  opacity: 1;
+}
+
+.logs{
+  position: absolute;
+  opacity: 1;
+
+  transition: .15s;
+}
+.logs-fade{
+  opacity: 0;
+}
+
+
+/* Chats and AddMore section */
+.main-sections{
+  position: relative;
+  width: 100vw;
+  height: 0;
+  color: white;
+  display: none;
+}
+.section-focus{
+  height: 88vh;
+  display: block;
+}
+
+.chat-rooms{
+
+  transition: .2s;
+}
+.add-more{
+
+  transition: .2s;
+}
+
+/* search engine */
+.search-engine{
+  position: absolute;
+  display: none;
+}
+
+.search-box{
+  position: relative;
+  top:100vh;
+
+  transition: .15s;
+}
+.search-box-focus{
+  top:0;
+}
+
+.search-nav{
+  position: fixed;
+  background-color: #355764;
+  height: 7vh;
+  width:100vw;
+}
+.search-bar{
+  margin: 1rem;
+  padding: 0 .75rem;
+  width: 75vw;
+  border-radius: 2rem;
+  background-color: white;
+  display: inline-block;
+}
+.search-bar img{
+  width: 6%;
+}
+.search-bar input{
+  width: 80%;
+  border: none;
+}
+.search-bar input:focus{
+  outline: none;
+}
+.search-bar a{
+  margin-left: 2%;
+}
+.search-nav .cancel{
+  text-decoration: none;
+  display: inline;
+  color: white;
+}
+
+.search-list{
+  width: 100vw;
+  height: 93vh;
+  overflow-y: scroll;
+}
+.search-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color:white;
+  padding: .5rem 1rem;
+  border-style: solid;
+  border-width: 0 0 .05rem 0;
+  background-image: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0));
+}
+.search-item img{
+  height: 4rem;
+  width: 4rem;
+  border-radius: 5rem;
+  background-color: white;
+}
+.search-item p{
+  display: inline;
+  position: relative;
+  bottom: 1rem;
+}
+.search-item a{
+  padding: 0 .5rem .2rem .5rem;
+  border: solid;
+  border-radius: 1rem;
+  position: relative;
+  top: 1rem;
+  color: white;
+  text-decoration: none;
 }

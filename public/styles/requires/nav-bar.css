@@ -32,6 +32,9 @@
   margin: 0 .3rem;
 }
 
-.nav-bar img {
+.nav-option img {
   height: 1.2rem;
+}
+.nav-option-options{
+  margin: 0;
 }

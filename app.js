@@ -1,4 +1,5 @@
 //My requires --- js scripts made by me
+const roomGenerator = require(__dirname + '/utilis/roomGenerator.js');
 
 //External requires
 require('dotenv').config();
@@ -7,6 +8,7 @@ const ejs = require("ejs");
 const MongoClient = require("mongodb").MongoClient;
 const assert = require('assert');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
 //requires init
 const app = express();
@@ -111,18 +113,17 @@ const insertUser = function(db, data, callback) {
 };
 
 //Finding a user in database
-const findUser = function(db, data, callback) {
+const findUsers = function(db, data, callback) {
   //connecting to users collection
   const collection = db.collection('users');
   //finding user data
-  collection.find({
-    userID: data.id,
-  }).toArray(function(err, foundUser) {
+  const limit = 15;
+  collection.find().toArray(function(err, foundUsers) {
     assert.equal(err, null);
-    callback(foundUser);
+    callback(foundUsers);
   });
 };
-
+//userID: new RegExp(data， ‘i')
 
 //io----server
 io.on('connection', function(socket) {
@@ -219,4 +220,26 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('message', message);
   });
 
+  socket.on('searchUsers', function(data){
+    client.connect(function(err) {
+      assert.equal(null, err);
+
+      const db = client.db(dbName);
+      const collection = db.collection('users');
+
+      collection.find({ userID: { $regex: data, $options: 'i' } }).limit(15).toArray(function(err, foundUsers) {
+        assert.equal(err, null);
+        io.to(socket.id).emit("loadUsers", foundUsers);
+      })
+
+    });
+  });
+
+  socket.on('joinRoom', function(data){
+    const userName = data.userName;
+    const clientName = data.clientName;
+    const roomName = roomGenerator(userName, clientName);
+
+    console.log(userName + "\n" + clientName + "\n" + roomName);
+  });
 });

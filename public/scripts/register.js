@@ -1,4 +1,4 @@
-const socket = io('https://evening-ocean-76261.herokuapp.com');
+const socket = io('http://localhost:3000/');
 
 
 function registerUser(){

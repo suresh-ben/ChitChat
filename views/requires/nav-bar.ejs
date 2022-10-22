@@ -1,9 +1,21 @@
 <!-- nav -->
 <div class="nav-bar">
 
-  <a class = "nav-bar-link-brand" href="/">
-    <h1 class = "nav-bar-brand"><span>Chit</span>Chat</h1>
-  </a>
+<div style="display:flex; justify-content:center; align-content:center">
+
+    <% if(optionsAvailable != 0){ %>
+      <a class = "nav-option nav-option-back" style="margin-left: .5rem;">
+        <img src="content/images/icon_back.png" alt="">
+      </a>
+    <%}%>
+
+    <% if(optionsAvailable == 0){ %>
+    <a class = "nav-bar-link-brand" href="/">
+      <h1 class = "nav-bar-brand"><span>Chit</span>Chat</h1>
+    </a>
+    <%}%>
+
+</div>
 
 <% if(optionsAvailable != 0){ %>
 
@@ -16,7 +28,7 @@
       <img src="content/images/icon_call.png" alt="">
     </a>
 
-    <a class = "nav-option nav-option-videocall">
+    <a class = "nav-option nav-option-options">
       <img src="content/images/icon_options.png" alt="">
     </a>
 

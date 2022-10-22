@@ -8,37 +8,72 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
   <link rel="stylesheet" href="styles/requires/nav-bar.css">
+  <link rel="stylesheet" href="styles/requires/logs-nav.css">
   <link rel="stylesheet" href="styles/requires/general.css">
   <link rel="stylesheet" href="styles/index.css">
 </head>
 
 <body>
-  <%- include("requires/nav-bar") -%>
 
-  <!-- input area -->
-  <div class="input-container">
-    <input type="text" class="input-message" value="">
-    <div style="display:inline">
-      <a class="send-button" onclick="sendMessage()" type="button" name="button"><img class="send-img" src="content/images/icon_send.png"></a>
+  <section class="logs">
+    <%- include("requires/logs-nav") -%>
+    <div style="height:12vh"></div>
+
+    <div class="main-sections chat-rooms section-focus">
+      <a class="chat">OpenChat</a>
     </div>
-  </div>
+    <div class="main-sections add-more">
+      add more
+    </div>
+  </section>
 
-  <!-- top pad -->
-  <div style="height:7vh"></div>
+  <section class="chat-manager">
+    <section class="chat-section">
+      <%- include("requires/nav-bar") -%>
+      <!-- input area -->
+      <div class="input-container">
+        <input type="text" class="input-message" value="">
+        <div style="display:inline">
+          <a class="send-button" onclick="sendMessage()" type="button" name="button"><img class="send-img" src="content/images/icon_send.png"></a>
+        </div>
+      </div>
 
-    <!-- messages -->
-  <div class="container message-container">
+      <!-- top pad -->
+      <div style="height:7vh"></div>
 
-    <!-- messages -->
+        <!-- messages -->
+      <div class="container message-container">
+        <!-- messages -->
+      </div>
+    </section>
+  </section>
 
-  </div>
+  <section class="search-engine">
+    <section class="search-box">
 
+      <div class="search-nav">
+        <div class="search-bar">
+          <img src="content/images/icon_search.png" alt="">
+          <input type="text" name="" value="" placeholder="search people">
+          <a class="search-clear"><img src="content/images/icon_cross.png" alt=""></a>
+        </div>
+        <a class="cancel">cancel</a>
+      </div>
+
+      <div style="height:7vh"></div>
+
+      <div class="search-list">
+          <div style="height:93vh; color: white; display:flex; align-content:center; justify-content: center">
+              Find your friends
+          </div>
+      </div>
+
+    </section>
+  </section>
   <!-- script -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-  <script src="scripts/index.js">
-
-  </script>
+  <script type="module" src="scripts/index.js"></script>
 
 </body>
 
