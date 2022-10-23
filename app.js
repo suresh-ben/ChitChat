@@ -21,9 +21,7 @@ app.use(express.static("public"));
 
 //Variables
 let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
+
 const url = process.env.DATAPORT;
 const dbName = "ChitChat";
 const client = new MongoClient(url, {
@@ -109,21 +107,6 @@ const insertUser = function(db, data, callback) {
 
     callback(result);
   });
-};
-
-const createFriendsList = function(db, data, callback) {
-  //connecting to users collection
-  const collection = db.collection('friends');
-  //insering user data
-  collection.insertOne({
-    userID : data.id,
-    friends : []
-  }, function(err, result) {
-    assert.equal(err, null);
-
-    callback(result);
-  });
-
 };
 
 //userID: new RegExp(data， ‘i')

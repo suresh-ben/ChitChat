@@ -58,13 +58,14 @@ socket.on('loadUsers', function(data){
     loadUser(data[i]);
   }
   $(".search-item a").click(function(){
-    //logs dealing
-
-    socket.emit('LoadFriends', cookies);
     //chat -- box dealing
     loadPreviousMessages();
     const clientName = $(this).attr("class");
     loadUserChat(clientName);
+
+
+    //logs dealing
+    socket.emit('LoadFriends', cookies);
   });
 });
 
