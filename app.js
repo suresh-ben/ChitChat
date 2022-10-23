@@ -107,22 +107,25 @@ const insertUser = function(db, data, callback) {
   }, function(err, result) {
     assert.equal(err, null);
 
-    console.log("user registered");
     callback(result);
   });
 };
 
-//Finding a user in database
-const findUsers = function(db, data, callback) {
+const createFriendsList = function(db, data, callback) {
   //connecting to users collection
-  const collection = db.collection('users');
-  //finding user data
-  const limit = 15;
-  collection.find().toArray(function(err, foundUsers) {
+  const collection = db.collection('friends');
+  //insering user data
+  collection.insertOne({
+    userID : data.id,
+    friends : []
+  }, function(err, result) {
     assert.equal(err, null);
-    callback(foundUsers);
+
+    callback(result);
   });
+
 };
+
 //userID: new RegExp(data， ‘i')
 
 //io----server
@@ -163,15 +166,14 @@ io.on('connection', function(socket) {
               insertUser(db, data, function() {
                 //make login cookie
                 io.to(socket.id).emit("credentialCookie", data);
-
-
                 client.close();
               });
+
             }
 
           })}});
-
     });
+
   });
 
   socket.on('userLogin', function(data){
@@ -206,18 +208,35 @@ io.on('connection', function(socket) {
     });
   });
 
-  socket.on('joinChat', function(data){
-    socket.broadcast.emit('joining', data.id);
+  socket.on('LoadFriends', function(data){
+    //data.id
+    client.connect(function(err) {
+      assert.equal(null, err);
+
+      //opening friends database
+      const db = client.db(dbName);
+      const collection = db.collection('friends');
+
+      let friendsList;
+      collection.find({userID : data.id }).toArray(function(err, foundUser){
+        assert.equal(err, null);
+
+        if(typeof(foundUser[0]) !== 'undefined')
+        friendsList = foundUser[0].friends;
+        io.to(socket.id).emit('friendsList', friendsList);
+      })
+
+    });
   });
 
   socket.on('message', function(data) {
-
+    const roomID = data.roomID;
     let message = {
       name: data.id,
       secret: data.message
     }
 
-    socket.broadcast.emit('message', message);
+    io.to(roomID).emit('message', message);
   });
 
   socket.on('searchUsers', function(data){
@@ -235,11 +254,54 @@ io.on('connection', function(socket) {
     });
   });
 
-  socket.on('joinRoom', function(data){
+  socket.on('addFriend',function(data){
+
     const userName = data.userName;
     const clientName = data.clientName;
-    const roomName = roomGenerator(userName, clientName);
 
-    console.log(userName + "\n" + clientName + "\n" + roomName);
+    client.connect(function(err) {
+      assert.equal(null, err);
+
+      //opening friends database
+      const db = client.db(dbName);
+      const collection = db.collection('friends');
+
+      collection.update({ userID : userName },
+	         {
+	            $setOnInsert: {userID : userName, friends: []}
+	         },
+	         {upsert: true}, function(){
+             //after upadting list with user friends
+             //finding friends of user
+             let friendsList;
+             collection.find({ userID : userName }).toArray(function(err, foundUser) {
+               assert.equal(err, null);
+
+               friendsList = new Set (foundUser[0].friends);
+               friendsList.add(clientName);
+
+               collection.updateOne({ userID : userName },
+                 { $set:{friends: Array.from(friendsList)}} , function(err, result) {
+                 assert.equal(err, null);
+
+                 client.close();
+               });
+             })
+           }
+      )
+    })
+  });
+
+  socket.on('joinRoom', function(data){
+    const prevRoom = data.currentRoom;
+    if(prevRoom)
+      socket.leave(prevRoom);
+
+    const userName = data.userName;
+    const clientName = data.clientName;
+    const roomID = roomGenerator(userName, clientName);
+
+    socket.join(roomID);
+    io.to(socket.id).emit("joinedRoom", roomID);
   });
 });

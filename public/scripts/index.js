@@ -3,6 +3,8 @@ import * as manager from "./requires/manager.js";
 import * as searchManager from "./requires/searchManager.js";
 import * as chatManager from "./requires/chatManager.js";
 
+var roomID;
+
 const cookies = {};
 var pairs = document.cookie.split(";");
 for (var i=0; i<pairs.length; i++){
@@ -20,10 +22,14 @@ $(".search-bar input").on('input',(err)=>{
   }
   sendLoadReq(inp.val());
 });
+$(".send-button").click(()=>{
+  sendMessage();
+});
 //Networking
 socket.on('connection');
-socket.emit('joinChat', cookies);
+socket.emit('LoadFriends', cookies);
 
+//todo -- for grps
 socket.on('joining', function(data) {
   let joinSecret = $((document.createElement('p')));
   joinSecret.addClass("join-secret");
@@ -39,6 +45,9 @@ socket.on('joining', function(data) {
 });
 
 socket.on('message', function(data) {
+  if(data.name === cookies.id)
+    loadMeassage("Me", data.secret, true);
+  else
   loadMeassage(data.name, data.secret, false);
 });
 
@@ -49,9 +58,38 @@ socket.on('loadUsers', function(data){
     loadUser(data[i]);
   }
   $(".search-item a").click(function(){
+    //logs dealing
+
+    socket.emit('LoadFriends', cookies);
+    //chat -- box dealing
+    loadPreviousMessages();
     const clientName = $(this).attr("class");
     loadUserChat(clientName);
   });
+});
+
+socket.on('joinedRoom', function(data){
+  roomID = data;
+});
+
+socket.on('friendsList', function(data){
+  if(data == null) return;
+  $(".chat-rooms").html("");
+
+  for(let i = 0; i < data.length; i++)
+  {
+    const userData = {
+      userID : data[i],
+      userDP : null
+    }
+    loadFriend(userData);
+  }
+  $(".chat-rooms a").click(function(){
+    chatManager.loadFriendChat();
+    const clientName = $(this).attr("class");
+    loadPreviousMessages();
+    loadUserChat(clientName);
+  })
 });
 
 function sendMessage() {
@@ -63,10 +101,9 @@ function sendMessage() {
 
   const data = {
     id : userID,
+    roomID: roomID,
     message : message
   }
-
-  loadMeassage("Me", message, true);
   socket.emit('message', data);
 }
 
@@ -139,8 +176,41 @@ function loadUserChat(clientName){
   manager.closeSearchEngine();
 
   const data = {
+    currentRoom : roomID,
     userName : cookies.id,
     clientName : clientName
   }
+  socket.emit('addFriend', data);
   socket.emit('joinRoom', data);
+}
+
+function loadFriend(data){
+  let name = $((document.createElement('p')));
+  name.html(data.userID);
+
+  let img = $((document.createElement('img')));
+  if(!data.userDP)
+    img.attr("src", "content/images/nullDP.jpg");
+  else
+    console.log("found img");
+    //Todo -- load user DP
+
+  let userDIV = $((document.createElement('div')));
+  userDIV.addClass("chat-item");
+  userDIV.addClass("chat");
+  userDIV.append(img);
+  userDIV.append(name);
+
+  let chatLink = $((document.createElement('a')));
+  chatLink.attr('style','text-decoration:none');
+  chatLink.addClass(data.userID);
+  chatLink.append(userDIV);
+
+  $(".chat-rooms").append(chatLink);
+}
+
+function loadPreviousMessages(){
+  $('.message-container').html("");
+
+  //todo --- load prev messages mowa...
 }
