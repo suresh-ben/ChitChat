@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3000/');
+const socket = io('https://evening-ocean-76261.herokuapp.com/');
 import * as manager from "./requires/manager.js";
 import * as searchManager from "./requires/searchManager.js";
 import * as chatManager from "./requires/chatManager.js";
