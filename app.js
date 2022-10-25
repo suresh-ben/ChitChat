@@ -292,3 +292,4 @@ io.on('connection', function(socket) {
     io.to(socket.id).emit("joinedRoom", roomID);
   });
 });
+//Bug fixed
