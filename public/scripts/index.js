@@ -2,10 +2,14 @@ const socket = io('https://evening-ocean-76261.herokuapp.com/');
 import * as manager from "./requires/manager.js";
 import * as searchManager from "./requires/searchManager.js";
 import * as chatManager from "./requires/chatManager.js";
-import * as cookieManager from "./requires/cookieManager.js";
 
 var roomID;
-const cookies = cookieManager.cookies;
+const cookies = {};
+var pairs = document.cookie.split(";");
+for (var i=0; i<pairs.length; i++){
+  var pair = pairs[i].split("=");
+  cookies[(pair[0]+'').trim()] = unescape(pair.slice(1).join('='));
+}
 
 $(".search-bar input").on('input',(err)=>{
   const inp = $(".search-bar input");
@@ -23,10 +27,6 @@ $(".send-button").click(()=>{
 $(".nav-option-back").click(function(){
     socket.emit('LoadFriends', cookies);
     chatManager.backToLogs();
-});
-$(".logout").click(()=>{
-  cookieManager.deleteCookies();
-  location.reload();
 });
 //Networking
 socket.on('connection');
