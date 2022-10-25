@@ -1,4 +1,4 @@
-const socket = io('https://evening-ocean-76261.herokuapp.com/');
+const socket = io('dry-headland-52758.herokuapp.com/');
 
 function loginOnClick(){
   const id = $(".userID").val();
