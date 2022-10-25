@@ -16,15 +16,10 @@ function loginOnClick(){
 socket.on('connection');
 
 socket.on('credentialCookie', function(data){
-  //expiry
-  var todayDate = new Date();
-  var expDate = todayDate.setDate(todayDate.getDate() + 15);
-  expDate = new Date(expDate);
-
   const id = data.id;
   const pass = data.pass;
-  document.cookie = "id=" + id + "; expires=" + expDate;
-  document.cookie = "pass=" + pass + "; expires=" + expDate;
+  document.cookie = "id=" + id;
+  document.cookie = "pass=" + pass;
 
   //lets do chatting
   window.location.replace("/");
