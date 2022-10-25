@@ -5,22 +5,64 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChitChat - chat online with anyone</title>
+  <link rel="icon" type="image/x-icon" href="content/images/favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="styles/requires/nav-bar.css">
-    <link rel="stylesheet" href="styles/requires/general.css">
-    <link rel="stylesheet" href="styles/login-register.css">
+  <link rel="stylesheet" href="styles/requires/nav-bar.css">
+  <link rel="stylesheet" href="styles/requires/general.css">
+  <style>
+
+    .profile-links{
+      display: flex !important;
+      justify-content: space-between;
+      align-items:center;
+
+      position: absolute;
+      margin:5vw;
+      width: 90vw;
+      bottom:0;
+    }
+    .prof-link{
+      text-decoration: none;
+      color: white;
+      background-color: #7F8487;
+      padding: .5rem 1rem;
+      border-radius: .4rem;
+    }
+    </style>
 </head>
 
 <body>
   <%- include("requires/nav-bar") -%>
+  <div style="height:10vh">
 
-  
+  </div>
+
+  <img class="" style="margin:0 25vw; height:50vw; width:50vw; background-color:white; border-radius:50%" src="" alt="">
+
+  <div style="background-color: #355764; height:3rem; margin: 3rem 1rem; border-radius:1rem; display:flex; align-items:center; justify-content:center">
+   <p style="padding-top:1rem; color:white" class="">User Name</p>
+  </div>
+
+  <div class="profile-links">
+    <a class="prof-link logout">log out</a>
+    <a class="prof-link" href="/">Home</a>
+  </div>
 
   <!-- script -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  <script type="module">
+    import * as cookieManager from "./scripts/requires/cookieManager.js";
 
+    const cookies = cookieManager.cookies;
+    if(cookies.id == null || cookies.id == '') window.location.href = "/"; 
+
+    $(".logout").click(()=>{
+      cookieManager.deleteCookies();
+      location.reload();
+    });
+  </script>
 </body>
 
 </html>
