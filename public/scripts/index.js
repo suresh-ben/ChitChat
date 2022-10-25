@@ -4,7 +4,6 @@ import * as searchManager from "./requires/searchManager.js";
 import * as chatManager from "./requires/chatManager.js";
 
 var roomID;
-
 const cookies = {};
 var pairs = document.cookie.split(";");
 for (var i=0; i<pairs.length; i++){
@@ -86,10 +85,9 @@ socket.on('friendsList', function(data){
     loadFriend(userData);
   }
   $(".chat-rooms a").click(function(){
-    chatManager.loadFriendChat();
     const clientName = $(this).attr("class");
+    chatManager.loadFriendChat(clientName);
     loadPreviousMessages();
-    loadUserChat(clientName);
   })
 });
 
@@ -169,9 +167,8 @@ function loadUser(data){
 }
 
 function loadUserChat(clientName){
-  manager.openChatBox();
+  manager.openChatBox(clientName);
   manager.closeSearchEngine();
-
   const data = {
     currentRoom : roomID,
     userName : cookies.id,

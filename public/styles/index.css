@@ -223,6 +223,7 @@
   display: inline;
   position: relative;
   bottom: 1rem;
+  margin-left: .5rem;
 }
 .search-item a{
   padding: 0 .5rem .2rem .5rem;
@@ -255,6 +256,7 @@
   bottom: 1rem;
   text-decoration: none;
   border: none;
+  margin-left: .5rem;
 }
 
 /* Dropdown Button */

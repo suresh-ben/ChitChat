@@ -17,8 +17,8 @@ $(".log-option-groups").click(()=>{
   $(".chat-groups").addClass("section-focus");
 });
 
-export  function loadFriendChat(){
-  manager.openChatBox();
+export  function loadFriendChat(clientName){
+  manager.openChatBox(clientName);
   manager.closeLogs();
 };
 
