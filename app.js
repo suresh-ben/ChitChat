@@ -87,6 +87,10 @@ app.get("/register", function(req, res) {
     res.redirect("/");
 });
 
+app.get("/profile", function(req, res) {
+  res.render("profile", { optionsAvailable: 0 });
+});
+
 server.listen(port, function() {
   console.log("Server Started on port : " + port);
 });

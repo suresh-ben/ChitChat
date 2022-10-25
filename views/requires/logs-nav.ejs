@@ -11,9 +11,16 @@
         <img class="log-nav-option-img" src="content/images/icon_search.png" alt="">
       </a>
 
-      <a class = "nav-option">
-        <img class="log-nav-option-img" src="content/images/icon_options.png" alt="">
-      </a>
+      <div style="display:inline" class="dropdown">
+        <a class = "nav-option dropbtn" onclick="toggleDrop()">
+          <img class="log-nav-option-img" src="content/images/icon_options.png" alt="">
+        </a>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="/profile">Profile picture</a>
+          <a href="#">Log out</a>
+        </div>
+
+      </div>
 
     </div>
   </div>
@@ -24,3 +31,10 @@
   </div>
 
 </div>
+
+<script>
+
+  function toggleDrop() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+</script>

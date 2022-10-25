@@ -22,7 +22,7 @@ export  function loadFriendChat(){
   manager.closeLogs();
 };
 
-$(".nav-option-back").click(function(){
+export function backToLogs(){
   manager.openLogs();
   manager.closeChatBox();
-});
+};

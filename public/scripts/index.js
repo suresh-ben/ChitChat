@@ -25,6 +25,10 @@ $(".search-bar input").on('input',(err)=>{
 $(".send-button").click(()=>{
   sendMessage();
 });
+$(".nav-option-back").click(function(){
+    socket.emit('LoadFriends', cookies);
+    chatManager.backToLogs();
+});
 //Networking
 socket.on('connection');
 socket.emit('LoadFriends', cookies);
@@ -62,10 +66,6 @@ socket.on('loadUsers', function(data){
     loadPreviousMessages();
     const clientName = $(this).attr("class");
     loadUserChat(clientName);
-
-
-    //logs dealing
-    socket.emit('LoadFriends', cookies);
   });
 });
 
@@ -135,8 +135,8 @@ function loadMeassage(sender, data, myMessage) {
   }
 
   $(".message-container").append(messageBox);
-  window.scrollTo(0, document.body.scrollHeight);
 
+  window.scrollTo(0, $(".message-container").outerHeight());
 
 }
 
@@ -149,11 +149,7 @@ function loadUser(data){
   name.html(data.userID);
 
   let img = $((document.createElement('img')));
-  if(!data.userDP)
-    img.attr("src", "content/images/nullDP.jpg");
-  else
-    console.log("found img");
-    //Todo -- load user DP
+  img.attr("src", "https://avatars.dicebear.com/api/adventurer/" + data.userID + ".svg" + "?scale=85");
 
   let userDIV = $((document.createElement('div')));
   userDIV.addClass("user-detail");
@@ -190,11 +186,7 @@ function loadFriend(data){
   name.html(data.userID);
 
   let img = $((document.createElement('img')));
-  if(!data.userDP)
-    img.attr("src", "content/images/nullDP.jpg");
-  else
-    console.log("found img");
-    //Todo -- load user DP
+  img.attr("src", "https://avatars.dicebear.com/api/adventurer/" + data.userID + ".svg" + "?scale=85");
 
   let userDIV = $((document.createElement('div')));
   userDIV.addClass("chat-item");
