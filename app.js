@@ -305,5 +305,23 @@ io.on('connection', function(socket) {
     socket.join(roomID);
     io.to(socket.id).emit("joinedRoom", roomID);
   });
+
+  socket.on('loadChat', function(roomID){
+
+    client.connect(function(err) {
+      assert.equal(null, err);
+
+      //connecting to chats db --- rooID as collection
+      const db = client.db('Chats');
+      const collection = db.collection(roomID);
+
+      collection.find().toArray(function(err, messages) {
+        assert.equal(err, null);
+
+        io.to(socket.id).emit('loadChatMessages', messages);
+      });
+    });
+
+  });
 });
 //Bug fixed

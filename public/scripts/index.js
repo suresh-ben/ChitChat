@@ -62,7 +62,6 @@ socket.on('loadUsers', function(data){
   }
   $(".search-item a").click(function(){
     //chat -- box dealing
-    loadPreviousMessages();
     const clientName = $(this).attr("class");
     loadUserChat(clientName);
   });
@@ -70,6 +69,7 @@ socket.on('loadUsers', function(data){
 
 socket.on('joinedRoom', function(data){
   roomID = data;
+  loadPreviousMessages(roomID);
 });
 
 socket.on('friendsList', function(data){
@@ -87,7 +87,6 @@ socket.on('friendsList', function(data){
   $(".chat-rooms a").click(function(){
     const clientName = $(this).attr("class");
     chatManager.loadFriendChat(clientName);
-    loadPreviousMessages();
 
     //joining room
     const data = {
@@ -98,6 +97,16 @@ socket.on('friendsList', function(data){
     socket.emit('joinRoom', data);
   })
 });
+
+socket.on('loadChatMessages', function(messages){
+  for(let i =0; i < messages.length; i++)
+  {
+    if(messages[i].name == cookies.id)
+      loadMeassage("Me", messages[i].secret, true);
+    else
+      loadMeassage(cookies.id, messages[i].secret, false);
+  }
+})
 
 function sendMessage() {
   let input = $('.input-message');
@@ -207,8 +216,9 @@ function loadFriend(data){
   $(".chat-rooms").append(chatLink);
 }
 
-function loadPreviousMessages(){
+function loadPreviousMessages(roomID){
   $('.message-container').html("");
 
   //todo --- load prev messages mowa...
+  socket.emit('loadChat', roomID);
 }
