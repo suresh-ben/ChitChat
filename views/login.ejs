@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChitChat - chat online with anyone</title>
+  <link rel="icon" type="image/x-icon" href="content/images/favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
     <link rel="stylesheet" href="styles/requires/nav-bar.css">
@@ -13,7 +14,7 @@
 </head>
 
 <body>
-  <%- include("requires/nav-bar") -%> 
+  <%- include("requires/nav-bar") -%>
 
   <!-- top pad -->
   <div style="height:7vh"></div>
@@ -29,7 +30,7 @@
         <input class="user-input userID" type="text" name="" value="">
         <p class="input-label">Password</p>
         <input class="user-input userPASS" type="password" name="" value=""><br>
-        <button onclick="loginOnClick()" class="resond-button" type="submit" name="button">Login</button>
+        <button class="resond-button login-button" type="submit" name="button">Login</button>
 
         <div class="register-feed" style="display:flex; justify-content: center">
           <p class="feedback"></p>
@@ -45,7 +46,7 @@
   <!-- script -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-  <script src="scripts/login.js">
+  <script type="module" src="scripts/login.js">
 
   </script>
 

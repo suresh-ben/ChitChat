@@ -1,7 +1,7 @@
 const socket = io('https://dry-headland-52758.herokuapp.com/');
+import * as cookieManager from "./requires/cookieManager.js";
 
-
-function registerUser(){
+$(".register-button").click(()=>{
 
   const userEmail = $(".userEmail").val();
 
@@ -33,7 +33,7 @@ function registerUser(){
 
   $(".feedback").html("");
   registerRequest(data);
-}
+});
 
 function isValidEmail(email) {
   var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -56,11 +56,5 @@ socket.on('userIDExists', function(data){
 });
 
 socket.on('credentialCookie', function(data){
-  const id = data.id;
-  const pass = data.pass;
-  document.cookie = "id=" + id;
-  document.cookie = "pass=" + pass;
-
-  //lets do chatting
-  window.location.replace("/");
+  cookieManager.makeCookies(data);
 });

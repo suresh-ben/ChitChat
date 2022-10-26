@@ -1,6 +1,7 @@
 const socket = io('dry-headland-52758.herokuapp.com/');
+import * as cookieManager from "./requires/cookieManager.js";
 
-function loginOnClick(){
+$(".login-button").click(()=>{
   const id = $(".userID").val();
   const pass = $(".userPASS").val();
 
@@ -10,19 +11,13 @@ function loginOnClick(){
   }
 
   socket.emit('userLogin', creds);
-};
+});
 
 //Networking
 socket.on('connection');
 
 socket.on('credentialCookie', function(data){
-  const id = data.id;
-  const pass = data.pass;
-  document.cookie = "id=" + id;
-  document.cookie = "pass=" + pass;
-
-  //lets do chatting
-  window.location.replace("/");
+  cookieManager.makeCookies(data);
 });
 
 socket.on('loginError', function(data){
