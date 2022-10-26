@@ -88,6 +88,14 @@ socket.on('friendsList', function(data){
     const clientName = $(this).attr("class");
     chatManager.loadFriendChat(clientName);
     loadPreviousMessages();
+
+    //joining room
+    const data = {
+      currentRoom : roomID,
+      userName : cookies.id,
+      clientName : clientName
+    }
+    socket.emit('joinRoom', data);
   })
 });
 
