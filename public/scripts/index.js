@@ -104,7 +104,7 @@ socket.on('loadChatMessages', function(messages){
     if(messages[i].name == cookies.id)
       loadMeassage("Me", messages[i].secret, true);
     else
-      loadMeassage(cookies.id, messages[i].secret, false);
+      loadMeassage(messages[i].name, messages[i].secret, false);
   }
 })
 
