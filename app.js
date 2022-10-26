@@ -224,6 +224,20 @@ io.on('connection', function(socket) {
     }
 
     io.to(roomID).emit('message', message);
+
+    //storing to data Database
+    client.connect(function(err) {
+      assert.equal(null, err);
+
+      //connecting to chats db --- rooID as collection
+      const db = client.db('Chats');
+      const collection = db.collection(roomID);
+
+      collection.insertOne({
+        name: data.id,
+        secret: data.message});
+    });
+
   });
 
   socket.on('searchUsers', function(data){
