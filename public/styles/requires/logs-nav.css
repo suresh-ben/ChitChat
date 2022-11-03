@@ -18,7 +18,8 @@
 .logs-main{
   height: 5vh;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; -- use for groups update */
+  justify-content: center;
   align-items: center;
   margin: 0 5rem;
 }
