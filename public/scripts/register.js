@@ -1,7 +1,12 @@
 const socket = io('https://dry-headland-52758.herokuapp.com/');
 import * as cookieManager from "./requires/cookieManager.js";
+var allowClickOnce = true;
 
 $(".register-button").click(()=>{
+
+  //validating -- one click
+  if(!allowClickOnce) return;
+  allowClickOnce = false;
 
   const userEmail = $(".userEmail").val();
 
@@ -11,7 +16,7 @@ $(".register-button").click(()=>{
     return;
   }
 
-  //Validating user ID
+  //Validating user ID -- todo onlu allow smallcase , _, .
   const userID = $(".userID").val();
   if(userID == ""){
     $(".feedback").html("please enter userID");
