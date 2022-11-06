@@ -1,7 +1,13 @@
 const socket = io('dry-headland-52758.herokuapp.com/');
 import * as cookieManager from "./requires/cookieManager.js";
+var allowClickOnce = true;
 
 $(".login-button").click(()=>{
+
+  //validating -- one click
+  if(!allowClickOnce) return;
+  allowClickOnce = false;
+
   const id = $(".userID").val();
   const pass = $(".userPASS").val();
 
