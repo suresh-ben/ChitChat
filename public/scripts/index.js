@@ -1,4 +1,4 @@
-const socket = io('dry-headland-52758.herokuapp.com/');
+import socket from "./requires/socket.js";
 import * as manager from "./requires/manager.js";
 import * as searchManager from "./requires/searchManager.js";
 import * as chatManager from "./requires/chatManager.js";

@@ -1,4 +1,4 @@
-const socket = io('https://dry-headland-52758.herokuapp.com/');
+import socket from "./requires/socket.js";
 import * as cookieManager from "./requires/cookieManager.js";
 var allowClickOnce = true;
 
