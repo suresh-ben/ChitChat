@@ -13,7 +13,7 @@ const bcrypt = require('bcrypt');
 //requires init
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server, { cors: { orgin: "*"}});
+const io = require("socket.io")(server, { cors: { orgin: "*" } });
 app.use(cookieParser());
 
 app.set('view engine', 'ejs');
@@ -25,92 +25,90 @@ let port = process.env.PORT;
 const url = process.env.DATAPORT;
 const dbName = "ChitChat";
 const client = new MongoClient(url, {
-  useNewUrlParser: true
+    useNewUrlParser: true
 });
 
 app.get("/", function(req, res) {
-  const cookies = req.cookies;
-  const userID = cookies.id;
-  const pass = cookies.pass;
+    const cookies = req.cookies;
+    const userID = cookies.id;
+    const pass = cookies.pass;
 
-  if(!userID || !pass)
-    res.redirect("/register");
-  else //find the user and load the chat page
-  {
-    client.connect(function(err) {
-      assert.equal(null, err);
+    if (!userID || !pass)
+        res.redirect("/register");
+    else //find the user and load the chat page
+    {
+        client.connect(function(err) {
+            assert.equal(null, err);
 
-      const db = client.db(dbName);
+            const db = client.db(dbName);
 
-      //connecting to users collection
-      const collection = db.collection('users');
+            //connecting to users collection
+            const collection = db.collection('users');
 
-      collection.find({userID: userID}).toArray(function(err, foundUser) {
-        assert.equal(err, null);
+            collection.find({ userID: userID }).toArray(function(err, foundUser) {
+                assert.equal(err, null);
 
 
-        if(foundUser.length == 0 || foundUser[0].pass != pass)
-          {
-            //deleting cookies -- error cookie
-            res.clearCookie("id");
-            res.clearCookie("pass");
-            res.redirect("/login");
-          }
-        else if(foundUser[0].pass == pass)
-            res.render("index", { optionsAvailable: 1 });
+                if (foundUser.length == 0 || foundUser[0].pass != pass) {
+                    //deleting cookies -- error cookie
+                    res.clearCookie("id");
+                    res.clearCookie("pass");
+                    res.redirect("/login");
+                } else if (foundUser[0].pass == pass)
+                    res.render("index", { optionsAvailable: 1 });
 
-          client.close();
-      });
-    });
-  }
+                client.close();
+            });
+        });
+    }
 });
 
 app.get("/login", function(req, res) {
-  const cookies = req.cookies;
-  const userID = cookies.id;
-  const pass = cookies.pass;
+    const cookies = req.cookies;
+    const userID = cookies.id;
+    const pass = cookies.pass;
 
-  if(!userID || !pass)
-    res.render("login", { optionsAvailable: 0 });
-  else
-    res.redirect("/");
+    if (!userID || !pass)
+        res.render("login", { optionsAvailable: 0 });
+    else
+        res.redirect("/");
 });
 
 app.get("/register", function(req, res) {
-  const cookies = req.cookies;
-  const userID = cookies.id;
-  const pass = cookies.pass;
+    const cookies = req.cookies;
+    const userID = cookies.id;
+    const pass = cookies.pass;
 
-  if(!userID || !pass)
-    res.render("register", { optionsAvailable: 0 });
-  else
-    res.redirect("/");
+    if (!userID || !pass)
+        res.render("register", { optionsAvailable: 0 });
+    else
+        res.redirect("/");
 });
 
 app.get("/profile", function(req, res) {
-  res.render("profile", { optionsAvailable: 0 });
+    res.render("profile", { optionsAvailable: 0 });
 });
 
 server.listen(port, function() {
-  console.log("Server Started on port : " + port);
+    console.log("Server Started on port : " + port);
 });
 
 //Database
 
 //user insertion into database
 const insertUser = function(db, data, callback) {
-  //connecting to users collection
-  const collection = db.collection('users');
-  //insering user data
-  collection.insertOne({
-    userID : data.id,
-    pass: data.pass,
-    mail : data.mail
-  }, function(err, result) {
-    assert.equal(err, null);
+    //connecting to users collection
+    const collection = db.collection('users');
+    //insering user data
+    collection.insertOne({
+        userID: data.id,
+        pass: data.pass,
+        mail: data.mail
+    }, function(err, result) {
+        assert.equal(err, null);
 
-    callback(result);
-  });
+        callback(result);
+    });
 };
 
 //userID: new RegExp(data， ‘i')
@@ -118,210 +116,202 @@ const insertUser = function(db, data, callback) {
 //io----server
 io.on('connection', function(socket) {
 
-  socket.on('registerRequest', function(data) {
+    socket.on('registerRequest', function(data) {
 
-    client.connect(function(err) {
-      assert.equal(null, err);
-      const db = client.db(dbName);
+        client.connect(function(err) {
+            assert.equal(null, err);
+            const db = client.db(dbName);
 
-      //connecting to users collection
-      const collection = db.collection('users');
-      //checking wheter user id exists
-      //finding user data
+            //connecting to users collection
+            const collection = db.collection('users');
+            //checking wheter user id exists
+            //finding user data
 
-      collection.find({mail: data.mail}).toArray(function(err, foundUsermail) {
-        assert.equal(err, null);
+            collection.find({ mail: data.mail }).toArray(function(err, foundUsermail) {
+                assert.equal(err, null);
 
-        if (foundUsermail.length != 0) {
-          //console.log("Mail already exists");
-          io.to(socket.id).emit("mailExists");
+                if (foundUsermail.length != 0) {
+                    //console.log("Mail already exists");
+                    io.to(socket.id).emit("mailExists");
 
-          client.close();
-        }
-        else{
-          collection.find({userID: data.id}).toArray(function(err, foundUser) {
-            assert.equal(err, null);
+                    client.close();
+                } else {
+                    collection.find({ userID: data.id }).toArray(function(err, foundUser) {
+                        assert.equal(err, null);
 
-            if (foundUser.length != 0) {
-              //console.log("User already exists");
-              io.to(socket.id).emit("userIDExists");
+                        if (foundUser.length != 0) {
+                            //console.log("User already exists");
+                            io.to(socket.id).emit("userIDExists");
 
-              client.close();
-            }
-            else {
-              //Inserting a user
-              insertUser(db, data, function() {
-                //make login cookie
-                io.to(socket.id).emit("credentialCookie", data);
+                            client.close();
+                        } else {
+                            //Inserting a user
+                            insertUser(db, data, function() {
+                                //make login cookie
+                                io.to(socket.id).emit("credentialCookie", data);
+                                client.close();
+                            });
+
+                        }
+
+                    })
+                }
+            });
+        });
+
+    });
+
+    socket.on('userLogin', function(data) {
+        const userID = data.id;
+        const pass = data.pass;
+
+        client.connect(function(err) {
+            assert.equal(null, err);
+
+            const db = client.db(dbName);
+
+            //connecting to users collection
+            const collection = db.collection('users');
+
+            collection.find({ userID: userID }).toArray(function(error, foundUser) {
+                assert.equal(error, null);
+                if (foundUser.length == 0) {
+                    io.to(socket.id).emit('loginError');
+                } else if (foundUser[0].pass == pass) {
+                    io.to(socket.id).emit("credentialCookie", data);
+                } else {
+                    io.to(socket.id).emit("loginError", data);
+                }
+
                 client.close();
-              });
-
-            }
-
-          })}});
+            });
+        });
     });
 
-  });
+    socket.on('LoadFriends', function(data) {
+        //data.id
+        client.connect(function(err) {
+            assert.equal(null, err);
 
-  socket.on('userLogin', function(data){
-    const userID = data.id;
-    const pass = data.pass;
+            //opening friends database
+            const db = client.db(dbName);
+            const collection = db.collection('friends');
 
-    client.connect(function(err) {
-      assert.equal(null, err);
+            let friendsList;
+            collection.find({ userID: data.id }).toArray(function(err, foundUser) {
+                assert.equal(err, null);
 
-      const db = client.db(dbName);
+                if (typeof(foundUser[0]) !== 'undefined')
+                    friendsList = foundUser[0].friends;
+                io.to(socket.id).emit('friendsList', friendsList);
+            })
 
-      //connecting to users collection
-      const collection = db.collection('users');
+        });
+    });
 
-      collection.find({userID: userID}).toArray(function(error, foundUser) {
-        assert.equal(error, null);
-        if(foundUser.length == 0)
-        {
-          io.to(socket.id).emit('loginError');
-        }
-        else if(foundUser[0].pass == pass)
-        {
-          io.to(socket.id).emit("credentialCookie", data);
-        }
-        else
-        {
-          io.to(socket.id).emit("loginError", data);
+    socket.on('message', function(data) {
+        const roomID = data.roomID;
+        let message = {
+            name: data.id,
+            secret: data.message
         }
 
-          client.close();
-      });
-    });
-  });
+        io.to(roomID).emit('message', message);
 
-  socket.on('LoadFriends', function(data){
-    //data.id
-    client.connect(function(err) {
-      assert.equal(null, err);
+        //storing to data Database
+        client.connect(function(err) {
+            assert.equal(null, err);
 
-      //opening friends database
-      const db = client.db(dbName);
-      const collection = db.collection('friends');
+            //connecting to chats db --- rooID as collection
+            const db = client.db('Chats');
+            const collection = db.collection(roomID);
 
-      let friendsList;
-      collection.find({userID : data.id }).toArray(function(err, foundUser){
-        assert.equal(err, null);
-
-        if(typeof(foundUser[0]) !== 'undefined')
-        friendsList = foundUser[0].friends;
-        io.to(socket.id).emit('friendsList', friendsList);
-      })
+            collection.insertOne({
+                name: data.id,
+                secret: data.message
+            });
+        });
 
     });
-  });
 
-  socket.on('message', function(data) {
-    const roomID = data.roomID;
-    let message = {
-      name: data.id,
-      secret: data.message
-    }
+    socket.on('searchUsers', function(data) {
+        client.connect(function(err) {
+            assert.equal(null, err);
 
-    io.to(roomID).emit('message', message);
+            const db = client.db(dbName);
+            const collection = db.collection('users');
 
-    //storing to data Database
-    client.connect(function(err) {
-      assert.equal(null, err);
+            collection.find({ userID: { $regex: data, $options: 'i' } }).limit(15).toArray(function(err, foundUsers) {
+                assert.equal(err, null);
+                io.to(socket.id).emit("loadUsers", foundUsers);
+            })
 
-      //connecting to chats db --- rooID as collection
-      const db = client.db('Chats');
-      const collection = db.collection(roomID);
-
-      collection.insertOne({
-        name: data.id,
-        secret: data.message});
+        });
     });
 
-  });
+    socket.on('addFriend', function(data) {
 
-  socket.on('searchUsers', function(data){
-    client.connect(function(err) {
-      assert.equal(null, err);
+        const userName = data.userName;
+        const clientName = data.clientName;
 
-      const db = client.db(dbName);
-      const collection = db.collection('users');
+        client.connect(function(err) {
+            assert.equal(null, err);
 
-      collection.find({ userID: { $regex: data, $options: 'i' } }).limit(15).toArray(function(err, foundUsers) {
-        assert.equal(err, null);
-        io.to(socket.id).emit("loadUsers", foundUsers);
-      })
+            //opening friends database
+            const db = client.db(dbName);
+            const collection = db.collection('friends');
 
-    });
-  });
+            // collection.update({ userID: userName }, {
+            //     $setOnInsert: { userID: userName, friends: [] }
+            // }, { upsert: true }, function() {
+            //after upadting list with user friends
+            //finding friends of user
+            let friendsList;
+            collection.find({ userID: userName }).toArray(function(err, foundUser) {
+                    assert.equal(err, null);
 
-  socket.on('addFriend',function(data){
+                    friendsList = new Set(foundUser[0].friends);
+                    friendsList.add(clientName);
 
-    const userName = data.userName;
-    const clientName = data.clientName;
+                    collection.updateOne({ userID: userName }, { $set: { friends: Array.from(friendsList) } }, function(err, result) {
+                        assert.equal(err, null);
 
-    client.connect(function(err) {
-      assert.equal(null, err);
-
-      //opening friends database
-      const db = client.db(dbName);
-      const collection = db.collection('friends');
-
-      collection.update({ userID : userName },
-	         {
-	            $setOnInsert: {userID : userName, friends: []}
-	         },
-	         {upsert: true}, function(){
-             //after upadting list with user friends
-             //finding friends of user
-             let friendsList;
-             collection.find({ userID : userName }).toArray(function(err, foundUser) {
-               assert.equal(err, null);
-
-               friendsList = new Set (foundUser[0].friends);
-               friendsList.add(clientName);
-
-               collection.updateOne({ userID : userName },
-                 { $set:{friends: Array.from(friendsList)}} , function(err, result) {
-                 assert.equal(err, null);
-
-                 client.close();
-               });
-             })
-           }
-      )
-    })
-  });
-
-  socket.on('joinRoom', function(data){
-    const prevRoom = data.currentRoom;
-    if(prevRoom)
-      socket.leave(prevRoom);
-
-    const userName = data.userName;
-    const clientName = data.clientName;
-    const roomID = roomGenerator(userName, clientName);
-
-    socket.join(roomID);
-    io.to(socket.id).emit("joinedRoom", roomID);
-  });
-
-  socket.on('loadChat', function(roomID){
-
-    client.connect(function(err) {
-      assert.equal(null, err);
-
-      //connecting to chats db --- rooID as collection
-      const db = client.db('Chats');
-      const collection = db.collection(roomID);
-
-      collection.find().toArray(function(err, messages) {
-        assert.equal(err, null);
-
-        io.to(socket.id).emit('loadChatMessages', messages);
-      });
+                        // client.close();
+                    });
+                })
+                // })
+        })
     });
 
-  });
+    socket.on('joinRoom', function(data) {
+        const prevRoom = data.currentRoom;
+        if (prevRoom)
+            socket.leave(prevRoom);
+
+        const userName = data.userName;
+        const clientName = data.clientName;
+        const roomID = roomGenerator(userName, clientName);
+
+        socket.join(roomID);
+        io.to(socket.id).emit("joinedRoom", roomID);
+    });
+
+    socket.on('loadChat', function(roomID) {
+
+        client.connect(function(err) {
+            assert.equal(null, err);
+
+            //connecting to chats db --- rooID as collection
+            const db = client.db('Chats');
+            const collection = db.collection(roomID);
+
+            collection.find().toArray(function(err, messages) {
+                assert.equal(err, null);
+
+                io.to(socket.id).emit('loadChatMessages', messages);
+            });
+        });
+
+    });
 });
 //Bug fixed
