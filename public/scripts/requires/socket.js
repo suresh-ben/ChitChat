@@ -1,4 +1,3 @@
-
-const socket = io('https://evening-ocean-76261.herokuapp.com/');
+const socket = io('https://msg-ozev.onrender.com/');
 
 export default socket;
